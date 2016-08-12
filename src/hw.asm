@@ -1,4 +1,4 @@
-section .data
+section .rodata
     hw db  'Hello, World!',0xa
     ln equ $ - hw
 
