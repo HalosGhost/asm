@@ -37,7 +37,7 @@ print_file:
 _start:
     mov r8, [rsp]
     cmp r8, 1
-    jle .nofiles
+    jle .end
     mov r9, 2
 
     .loop:
@@ -59,10 +59,6 @@ _start:
 
         inc r9
         jmp .loop
-
-    .nofiles:
-        mov byte [fd], 1
-        call print_file
 
     .end:
         mov rax, 60
