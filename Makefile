@@ -3,13 +3,33 @@ ASM ?= nasm
 FMT ?= elf64
 LNK ?= ld
 
-all:
-	@mkdir -p build
+.PHONY: all release build link strip clean
+
+all: link
+
+release: strip
 	@for i in $(PROJECTS); do \
-		$(ASM) -f$(FMT) src/$$i.asm -o build/$$i.o; \
-		$(LNK) -o build/$$i build/$$i.o; \
+		rm -f -- ./dist/*.o; \
+	done
+
+dist:
+	@mkdir -p dist
+
+build: dist
+	@for i in $(PROJECTS); do \
+		$(ASM) -f$(FMT) src/$$i.asm -o dist/$$i.o; \
+	done
+
+link: build
+	@for i in $(PROJECTS); do \
+		$(LNK) -o dist/$$i dist/$$i.o; \
+	done
+
+strip: link
+	@for i in $(PROJECTS); do \
+		strip ./dist/$$i; \
 	done
 
 clean:
-	@rm -rf -- ./build
+	@rm -rf -- ./dist
 
